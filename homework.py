@@ -52,7 +52,7 @@ def get_api_answer(timestamp):
     params_request = {
         'url': ENDPOINT,
         'headers': HEADERS,
-        'params': {'from_date': timestamp}
+        'params': {'from_date': timestamp},
     }
     try:
         logging.info('Запрос к API')
@@ -60,7 +60,8 @@ def get_api_answer(timestamp):
         if response.status_code != HTTPStatus.OK:
             raise HTTPError('Код ответа не 200. {status}, {text}'.format(
                 status=response.status_code,
-                text=response.text
+                text=response.text,
+                params=params_request,
             ))
         return response.json()
     except Exception as error:
@@ -104,9 +105,9 @@ def main():
         '- %(name)s - %(levelname)s - %(message)s',
         level=logging.DEBUG)
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
-    timestamp = int(time.time())
-    old_message = ''
     while True:
+        timestamp = int(time.time())
+        old_message = ''
         try:
             response = get_api_answer(timestamp)
             homeworks = check_response(response)
