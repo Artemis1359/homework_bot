@@ -61,7 +61,6 @@ def get_api_answer(timestamp):
             raise HTTPError('Код ответа не 200. {status}, {text}'.format(
                 status=response.status_code,
                 text=response.text,
-                params=params_request,
             ))
         return response.json()
     except Exception as error:
