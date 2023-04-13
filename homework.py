@@ -26,12 +26,6 @@ HOMEWORK_VERDICTS = {
     'rejected': 'Работа проверена: у ревьюера есть замечания.'
 }
 
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.DEBUG)
-
-logger = logging.getLogger(__name__)
-
 
 def check_tokens():
     """Проверяет доступность работы переменных окружения."""
@@ -49,7 +43,7 @@ def send_message(bot, message):
         logging.info('Начато отправление сообщения')
         bot.send_message(TELEGRAM_CHAT_ID, message)
         logging.debug(f'Сообщение {message} отправлено')
-    except Exception as error:
+    except telegram.error.TelegramError as error:
         logging.error(f'Ошибка при отправке сообщения {message}: {error}')
 
 
@@ -105,6 +99,10 @@ def main():
     """Основная логика работы бота."""
     if not check_tokens():
         exit()
+    logging.basicConfig(
+        format='%(asctime)s - %(funcName)s - %(lineno)s'
+        '- %(name)s - %(levelname)s - %(message)s',
+        level=logging.DEBUG)
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
     timestamp = int(time.time())
     old_message = ''
