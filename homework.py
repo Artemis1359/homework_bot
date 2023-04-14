@@ -30,11 +30,7 @@ HOMEWORK_VERDICTS = {
 def check_tokens():
     """Проверяет доступность работы переменных окружения."""
     check = all([PRACTICUM_TOKEN, TELEGRAM_TOKEN, TELEGRAM_CHAT_ID])
-    if not check:
-        error_message = 'Не один из ключей доступа не обнаружен'
-        logging.critical(error_message)
-        return False
-    return True
+    return check
 
 
 def send_message(bot, message):
@@ -98,11 +94,9 @@ def parse_status(homework: dict) -> str:
 def main():
     """Основная логика работы бота."""
     if not check_tokens():
+        error_message = 'Не один из ключей доступа не обнаружен'
+        logging.critical(error_message)
         exit()
-    logging.basicConfig(
-        format='%(asctime)s - %(funcName)s - %(lineno)s'
-        '- %(name)s - %(levelname)s - %(message)s',
-        level=logging.DEBUG)
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
     while True:
         timestamp = int(time.time())
@@ -132,4 +126,8 @@ def main():
 
 
 if __name__ == '__main__':
+    logging.basicConfig(
+        format='%(asctime)s - %(funcName)s - %(lineno)s'
+               '- %(name)s - %(levelname)s - %(message)s',
+        level=logging.DEBUG)
     main()
